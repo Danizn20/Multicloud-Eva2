@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema ERP - Farmacia Cruz Azul</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #1a1a1a;
+        }
+
+        .header {
+            background: linear-gradient(90deg, #1e40af 0%, #1e3a8a 100%);
+            color: white;
+            padding: 24px 40px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-logo {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .header-text h1 {
+            font-size: 1.6em;
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .header-text p {
+            font-size: 0.85em;
+            opacity: 0.9;
+            margin-top: 4px;
+            font-weight: 400;
+        }
+
+        .main-container {
+            flex: 1;
+            padding: 32px 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 430px 1fr;
+            gap: 24px;
+            height: fit-content;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 12px;
+            padding: 28px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            height: fit-content;
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #1e40af;
+            margin-bottom: 24px;
+        }
+
+        .card-title::before {
+            content: '';
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background: #1e40af;
+            border-radius: 6px;
+            flex-shrink: 0;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        input[type="text"]::placeholder,
+        input[type="number"]::placeholder,
+        textarea::placeholder {
+            color: #94a3b8;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #1e40af;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 12px 20px;
+            margin-top: 20px;
+            background: linear-gradient(90deg, #1e40af 0%, #1e3a8a 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        .table-card {
+            background: white;
+            border-radius: 12px;
+            padding: 28px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .table-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #1e40af;
+        }
+
+        .table-title::before {
+            content: '';
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background: #1e40af;
+            border-radius: 6px;
+            flex-shrink: 0;
+        }
+
+        .count-badge {
+            background: #eff6ff;
+            color: #1e40af;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .table-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #94a3b8;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .empty-state-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+
+        .empty-state-text {
+            font-size: 0.95em;
+            color: #94a3b8;
+        }
+
+        .table-wrapper {
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        thead {
+            background: #f8fafc;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        th {
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9em;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.95em;
+        }
+
+        tbody tr {
+            transition: background 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .id-cell {
+            font-weight: 600;
+            color: #1e40af;
+            font-size: 0.95em;
+        }
+
+        .product-cell {
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .quantity-cell,
+        .price-cell {
+            text-align: right;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 20px;
+            border-radius: 8px;
+            display: none;
+            animation: slideIn 0.3s ease;
+            z-index: 1000;
+            max-width: 400px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .alert.success {
+            background: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+            display: block;
+        }
+
+        .alert.error {
+            background: #fef2f2;
+            color: #7c2d12;
+            border: 1px solid #fecaca;
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid #e2e8f0;
+            border-top-color: #1e40af;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 12px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .footer {
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            padding: 20px 40px;
+            text-align: center;
+            color: #64748b;
+            font-size: 0.85em;
+            margin-top: auto;
+        }
+
+        @media (max-width: 1024px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .form-card {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-wrap: wrap;
+            }
+
+            .main-container {
+                padding: 20px;
+            }
+
+            .form-card,
+            .table-card {
+                padding: 20px;
+            }
+
+            .card-title,
+            .table-title {
+                font-size: 1.1em;
+            }
+
+            table {
+                font-size: 0.85em;
+            }
+
+            th, td {
+                padding: 10px 12px;
+            }
+
+            .alert {
+                right: 10px;
+                left: 10px;
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-container">
+            <div class="header-logo">💊</div>
+            <div class="header-text">
+                <h1>Farmacias Cruz Azul</h1>
+                <p>Sistema ERP - Gestión de Productos</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <div id="alertMessage" class="alert"></div>
+
+        <div class="content-wrapper">
+            <!-- Formulario (Izquierda) -->
+            <div class="form-card">
+                <h2 class="card-title">Registrar Nuevo Producto</h2>
+                <form id="productForm">
+                    <div class="form-group">
+                        <label for="productId">ID Producto</label>
+                        <input type="number" id="productId" name="id" placeholder="Ej. 001" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productName">Producto</label>
+                        <input type="text" id="productName" name="nombre_producto" placeholder="Ej. Paracetamol 500mg" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productDescription">Descripción</label>
+                        <textarea id="productDescription" name="descripcion" placeholder="Descripción del producto..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productQuantity">Cantidad</label>
+                        <input type="number" id="productQuantity" name="cantidad" placeholder="Ej. 100" min="1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productPrice">Precio Unitario ($)</label>
+                        <input type="number" id="productPrice" name="precio_unitario" placeholder="Ej. 1500" step="0.01" min="0" required>
+                    </div>
+
+                    <button type="submit" class="btn-submit">
+                        <span>+</span> Agregar Producto
+                    </button>
+                </form>
+            </div>
+
+            <!-- Tabla (Derecha) -->
+            <div class="table-card">
+                <div class="table-header">
+                    <h2 class="table-title">Inventario de Productos</h2>
+                    <div class="count-badge"><span id="productCount">0</span></div>
+                </div>
+
+                <!-- Indicador de carga -->
+                <div id="loading-table" class="loading">
+                    <div class="spinner"></div>
+                    Cargando productos...
+                </div>
+
+                <!-- Tabla -->
+                <div id="tableContent" class="table-content">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📭</div>
+                        <div class="empty-state-title">Sin productos registrados</div>
+                        <div class="empty-state-text">Utilice el formulario para agregar productos al inventario.</div>
+                    </div>
+                </div>
+
+                <div id="tableWrapper" class="table-wrapper" style="display: none;">
+                    <table id="productsTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Producto</th>
+                                <th>Descripción</th>
+                                <th style="text-align: right;">Cantidad</th>
+                                <th style="text-align: right;">Precio Unitario</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        Farmacias Cruz Azul — Sistema ERP v1.0 | Frontend conectado al Backend (PHP/Apache) — MariaDB
+    </div>
+
+    <script>
+        // URLs del backend
+        const API_BASE_URL = '';
+        const API_INSERT = '/backend.php?action=insert';
+        const API_GET = '/backend.php?action=get';
+
+        // Elementos
+        const form = document.getElementById('productForm');
+        const alertMessage = document.getElementById('alertMessage');
+        const loadingTable = document.getElementById('loading-table');
+        const tableContent = document.getElementById('tableContent');
+        const tableWrapper = document.getElementById('tableWrapper');
+        const tableBody = document.getElementById('tableBody');
+        const productCount = document.getElementById('productCount');
+
+        // Event listeners
+        form.addEventListener('submit', handleFormSubmit);
+        window.addEventListener('DOMContentLoaded', loadProducts);
+
+        /**
+         * Manejar envío del formulario
+         */
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+
+            // Validaciones
+            if (!data.id || !data.nombre_producto || !data.descripcion || !data.cantidad || !data.precio_unitario) {
+                showAlert('Por favor completa todos los campos', 'error');
+                return;
+            }
+
+            if (data.cantidad < 1) {
+                showAlert('La cantidad debe ser mayor a 0', 'error');
+                return;
+            }
+
+            if (data.precio_unitario < 0) {
+                showAlert('El precio no puede ser negativo', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(API_INSERT, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    showAlert('✅ Producto guardado exitosamente', 'success');
+                    form.reset();
+                    setTimeout(() => loadProducts(), 500);
+                } else {
+                    showAlert('❌ Error: ' + (result.message || 'No se pudo guardar'), 'error');
+                }
+            } catch (error) {
+                showAlert('❌ Error: Verifica que el backend esté activo', 'error');
+                console.error('Error:', error);
+            }
+        }
+
+        /**
+         * Cargar productos
+         */
+        async function loadProducts() {
+            loadingTable.classList.add('active');
+            tableContent.style.display = 'block';
+            tableWrapper.style.display = 'none';
+            tableBody.innerHTML = '';
+
+            try {
+                const response = await fetch(API_GET, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success && result.data && result.data.length > 0) {
+                    result.data.forEach(product => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td class="id-cell">${escapeHtml(product.id || '-')}</td>
+                            <td class="product-cell">${escapeHtml(product.nombre_producto || '-')}</td>
+                            <td>${escapeHtml(product.descripcion || '-')}</td>
+                            <td class="quantity-cell">${Number(product.cantidad || 0).toLocaleString('es-CL')}</td>
+                            <td class="price-cell">$${Number(product.precio_unitario || 0).toLocaleString('es-CL', {minimumFractionDigits: 0, maximumFractionDigits: 2})}</td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+
+                    productCount.textContent = result.data.length;
+                    tableContent.style.display = 'none';
+                    tableWrapper.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            } finally {
+                loadingTable.classList.remove('active');
+            }
+        }
+
+        /**
+         * Mostrar alerta
+         */
+        function showAlert(message, type = 'info') {
+            alertMessage.textContent = message;
+            alertMessage.className = 'alert ' + type;
+
+            if (type === 'success') {
+                setTimeout(() => {
+                    alertMessage.className = 'alert';
+                }, 4000);
+            }
+        }
+
+        /**
+         * Escapar HTML
+         */
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
