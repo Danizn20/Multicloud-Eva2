@@ -4,17 +4,17 @@ services:
   database:
     build: ./database
     container_name: cruz_azul_db
+    restart: always
     environment:
       - POSTGRES_DB=cruz_azul_db
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
+      - POSTGRES_PASSWORD=cruzazul
     networks:
       - azul-net
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
-
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d cruz_azul_db"]
       interval: 10s
@@ -24,13 +24,13 @@ services:
   frontend:
     build: ./frontend
     container_name: cruz_azul_app
+    restart: always
     ports:
-      - "80:3000" # Expone el puerto 80 hacia internet mapeado al 3000 de Node
+      - "80:3000"
     environment:
-      # En mi PC utilice "database", en AWS se debe cambiar por la IP privada de la EC2
       - DB_HOST=database
       - DB_USER=postgres
-      - DB_PASSWORD=password
+      - DB_PASSWORD=cruzazul
       - DB_NAME=cruz_azul_db
     networks:
       - azul-net
